@@ -1,0 +1,178 @@
+﻿@*@model apiconsume.Models.Register
+
+    @{
+        ViewBag.Title = "CreateUser";
+    }
+
+
+    <h2>Create New User</h2>
+
+    @using (Html.BeginForm("CreateUser", "Apiconsume", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        <div class="form-group">
+            @Html.LabelFor(model => model.first_name, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.first_name, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.first_name)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.last_name, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.last_name, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.last_name)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Email, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Email)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Avatar, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.Avatar, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Avatar)
+            </div>
+        </div>
+        <div>
+
+            <p>
+                @TempData["msg"]
+            </p>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </div>
+        }*@
+@model apiconsume.Models.Register
+
+@{
+    ViewBag.Title = "CreateUser";
+}
+
+<!-- Include Bootstrap CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+<!-- Include SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+<h2>Create New User</h2>
+
+@using (Html.BeginForm("CreateUser", "Apiconsume", FormMethod.Post, new { @class = "form-horizontal", role = "form", id = "createUserForm" }))
+{
+    <div class="form-group">
+        @Html.LabelFor(model => model.first_name, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.first_name, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.first_name)
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.last_name, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.last_name, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.last_name)
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Email, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Email)
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Avatar, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.Avatar, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Avatar)
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Create" class="btn btn-primary" />
+        </div>
+    </div>
+}
+
+<!-- Include jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Include jQuery Validation Plugin -->
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.19.3/jquery.validate.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.19.3/additional-methods.min.js"></script>
+
+<!-- Include SweetAlert2 JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    $(document).ready(function() {
+        $("#createUserForm").validate({
+            rules: {
+                first_name: "required",
+                last_name: "required",
+                Email: {
+                    required: true,
+                    email: true
+                },
+                Avatar: "required"
+            },
+            messages: {
+                first_name: "Please enter your first name",
+                last_name: "Please enter your last name",
+                Email: {
+                    required: "Please enter your email",
+                    email: "Please enter a valid email address"
+                },
+                Avatar: "Please enter an avatar URL"
+            },
+            submitHandler: function(form) {
+                $.ajax({
+                    url: $(form).attr("action"),
+                    type: 'POST',
+                    data: $(form).serialize(),
+                    success: function(response) {
+                        if (response.success) {
+                            Swal.fire({
+                                title: 'Success!',
+                                text: response.message,
+                                icon: 'success',
+                                confirmButtonText: 'OK'
+                            }).then(() => {
+                                window.location.href = '@Url.Action("Index", "Apiconsume")'; // Redirect to Index page
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'Error!',
+                                text: response.message,
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'There was a problem creating the user.',
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                });
+            }
+        });
+    });
+</script>
+

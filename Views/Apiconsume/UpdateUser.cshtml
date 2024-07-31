@@ -1,0 +1,48 @@
+﻿@model apiconsume.Models.Register
+
+@{
+    ViewBag.Title = "UpdateUser";
+}
+
+<h2>UpdateUser</h2>
+
+
+@using (Html.BeginForm("UpdateUser", "Apiconsume", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.ValidationSummary(true)
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.first_name)
+        @Html.TextBoxFor(model => model.first_name, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.first_name)
+    </div>
+
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.last_name)
+        @Html.TextBoxFor(model => model.last_name, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.last_name)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Email)
+        @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Email)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Avatar)
+        @Html.TextBoxFor(model => model.Avatar, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Avatar)
+    </div>
+
+
+    <!-- Add more fields as needed -->
+
+    <div class="form-group">
+        <input type="submit" value="Save Changes" class="btn btn-primary" />
+    </div>
+}
+
+
